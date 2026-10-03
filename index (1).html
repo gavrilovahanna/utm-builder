@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooking Converter: Cups, Tablespoons, Teaspoons, Ounces to Grams</title>
+<meta name="description" content="Free cooking converter for 50 baking ingredients. Pick flour, sugar, butter, honey, rice or oats and convert cups, tablespoons, teaspoons, ounces and grams instantly.">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background-color:#fffbf5;background-image:radial-gradient(#fcd34d55 1.5px,transparent 1.5px);background-size:22px 22px}
+:focus-visible{outline:3px solid #b45309;outline-offset:2px}
+</style>
+</head>
+<body class="text-stone-900 antialiased">
+<header class="max-w-3xl mx-auto px-4 pt-8 sm:pt-12">
+  <div class="rounded-3xl bg-gradient-to-br from-amber-200 via-amber-100 to-orange-50 border border-amber-300/60 shadow-sm px-6 py-8 sm:px-10 flex flex-col-reverse sm:flex-row items-center gap-6">
+    <div class="text-center sm:text-left flex-1">
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-amber-950">Cooking Converter</h1>
+      <p class="mt-3 text-amber-900/80 text-lg">Pick an ingredient, enter an amount, and see it in grams, ounces, cups, tablespoons and teaspoons.</p>
+    </div>
+    <div class="w-44 sm:w-56 shrink-0"><svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Measuring cup, wooden spoon and wheat"><ellipse cx="120" cy="148" rx="105" ry="8" fill="#92400e" opacity=".12"/><g transform="rotate(-18 42 100)"><ellipse cx="42" cy="66" rx="15" ry="20" fill="#d6a96b" stroke="#92400e" stroke-width="3"/><rect x="38" y="84" width="8" height="56" rx="4" fill="#d6a96b" stroke="#92400e" stroke-width="3"/></g><path d="M70 48H150L142 130Q141 140 131 140H89Q79 140 78 130Z" fill="#fff" stroke="#92400e" stroke-width="4" stroke-linejoin="round"/><path d="M73.500 88H146.500L142 130Q141 140 131 140H89Q79 140 78 130Z" fill="#fcd34d"/><path d="M150 62Q184 60 178 92Q172 116 145 114" fill="none" stroke="#92400e" stroke-width="5" stroke-linecap="round"/><g stroke="#92400e" stroke-width="3" stroke-linecap="round"><path d="M70 66H84M72 78H80M74 100H84M76 114H84"/></g><g stroke="#92400e" stroke-width="3" stroke-linecap="round" fill="none"><path d="M205 146Q200 100 208 52"/></g><g fill="#f59e0b" stroke="#92400e" stroke-width="2"><ellipse cx="198" cy="64" rx="5" ry="10" transform="rotate(-30 198 64)"/><ellipse cx="216" cy="62" rx="5" ry="10" transform="rotate(30 216 62)"/><ellipse cx="196" cy="86" rx="5" ry="10" transform="rotate(-30 196 86)"/><ellipse cx="214" cy="84" rx="5" ry="10" transform="rotate(30 214 84)"/><ellipse cx="195" cy="108" rx="5" ry="10" transform="rotate(-30 195 108)"/><ellipse cx="212" cy="106" rx="5" ry="10" transform="rotate(30 212 106)"/><ellipse cx="208" cy="44" rx="5" ry="10"/></g></svg></div>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 py-8">
+  <section class="bg-white border border-stone-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+    <label for="ing" class="block text-sm font-semibold mb-1">Ingredient</label>
+    <select id="ing" class="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-base"></select>
+
+    <div class="grid grid-cols-2 gap-3 mt-4">
+      <div>
+        <label for="amt" class="block text-sm font-semibold mb-1">Amount</label>
+        <input id="amt" type="number" inputmode="decimal" min="0" step="any" value="1" class="w-full rounded-xl border border-stone-300 px-3 py-3 text-base">
+      </div>
+      <div>
+        <label for="unit" class="block text-sm font-semibold mb-1">Unit</label>
+        <select id="unit" class="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-base">
+          <option value="cup">cups</option><option value="tbsp">tablespoons</option><option value="tsp">teaspoons</option>
+          <option value="oz">ounces (weight)</option><option value="g">grams</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="out" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6" aria-live="polite"></div>
+    <p id="note" class="mt-5 text-sm text-stone-500"></p>
+  </section>
+
+  <p class="mt-6 text-sm text-stone-500">Values are approximate. They are based on widely published ingredient weights per US cup (236.6 ml). How you scoop, sift or pack an ingredient can change the weight by 10% or more, so use a kitchen scale for best results.</p>
+</main>
+
+<script>
+const D=[{"slug":"all-purpose-flour","name":"All-purpose flour","gPerCup":125},{"slug":"bread-flour","name":"Bread flour","gPerCup":127},{"slug":"whole-wheat-flour","name":"Whole wheat flour","gPerCup":120},{"slug":"cake-flour","name":"Cake flour","gPerCup":114},{"slug":"rye-flour","name":"Rye flour","gPerCup":102},{"slug":"almond-flour","name":"Almond flour","gPerCup":96},{"slug":"coconut-flour","name":"Coconut flour","gPerCup":112},{"slug":"cornmeal","name":"Cornmeal","gPerCup":138},{"slug":"cornstarch","name":"Cornstarch","gPerCup":128},{"slug":"semolina","name":"Semolina","gPerCup":163},{"slug":"granulated-sugar","name":"Granulated sugar","gPerCup":200},{"slug":"brown-sugar","name":"Brown sugar (packed)","gPerCup":213},{"slug":"powdered-sugar","name":"Powdered sugar","gPerCup":120},{"slug":"honey","name":"Honey","gPerCup":340},{"slug":"maple-syrup","name":"Maple syrup","gPerCup":315},{"slug":"molasses","name":"Molasses","gPerCup":340},{"slug":"corn-syrup","name":"Corn syrup","gPerCup":325},{"slug":"butter","name":"Butter","gPerCup":227},{"slug":"vegetable-oil","name":"Vegetable oil","gPerCup":218},{"slug":"olive-oil","name":"Olive oil","gPerCup":216},{"slug":"milk","name":"Milk","gPerCup":245},{"slug":"buttermilk","name":"Buttermilk","gPerCup":245},{"slug":"water","name":"Water","gPerCup":237},{"slug":"heavy-cream","name":"Heavy cream","gPerCup":238},{"slug":"yogurt","name":"Yogurt","gPerCup":245},{"slug":"sour-cream","name":"Sour cream","gPerCup":230},{"slug":"cream-cheese","name":"Cream cheese","gPerCup":232},{"slug":"peanut-butter","name":"Peanut butter","gPerCup":258},{"slug":"cocoa-powder","name":"Cocoa powder","gPerCup":85},{"slug":"chocolate-chips","name":"Chocolate chips","gPerCup":170},{"slug":"white-rice","name":"White rice (uncooked)","gPerCup":185},{"slug":"brown-rice","name":"Brown rice (uncooked)","gPerCup":190},{"slug":"rolled-oats","name":"Rolled oats","gPerCup":90},{"slug":"quinoa","name":"Quinoa (uncooked)","gPerCup":170},{"slug":"lentils","name":"Lentils (dry)","gPerCup":192},{"slug":"couscous","name":"Couscous (dry)","gPerCup":173},{"slug":"breadcrumbs","name":"Breadcrumbs (dry)","gPerCup":108},{"slug":"baking-powder","name":"Baking powder","gPerCup":192},{"slug":"baking-soda","name":"Baking soda","gPerCup":220},{"slug":"table-salt","name":"Table salt","gPerCup":288},{"slug":"vanilla-extract","name":"Vanilla extract","gPerCup":208},{"slug":"shredded-coconut","name":"Shredded coconut","gPerCup":80},{"slug":"raisins","name":"Raisins","gPerCup":150},{"slug":"walnuts","name":"Walnuts (chopped)","gPerCup":120},{"slug":"pecans","name":"Pecans (chopped)","gPerCup":113},{"slug":"almonds","name":"Almonds (whole)","gPerCup":142},{"slug":"sesame-seeds","name":"Sesame seeds","gPerCup":144},{"slug":"chia-seeds","name":"Chia seeds","gPerCup":170},{"slug":"ground-flaxseed","name":"Ground flaxseed","gPerCup":112},{"slug":"shredded-cheddar","name":"Shredded cheddar","gPerCup":113}];
+const OZ=28.3495, $=id=>document.getElementById(id);
+const ing=$('ing'), amt=$('amt'), unit=$('unit'), out=$('out'), note=$('note');
+D.forEach((d,i)=>ing.add(new Option(d.name,i)));
+const fmt=n=>n>=100?Math.round(n).toLocaleString():n>=10?(+n.toFixed(1)).toString():(+n.toFixed(2)).toString();
+function calc(){
+  const d=D[ing.value], a=parseFloat(amt.value), c=d.gPerCup;
+  if(!(a>=0)){out.innerHTML='';return}
+  const g = unit.value==='g'?a : unit.value==='oz'?a*OZ : a*c*({cup:1,tbsp:1/16,tsp:1/48})[unit.value];
+  const cups=g/c;
+  const rows=[['Grams',g,'g'],['Ounces',g/OZ,'oz'],['Cups',cups,'cup'],['Tablespoons',cups*16,'tbsp'],['Teaspoons',cups*48,'tsp']];
+  out.innerHTML=rows.map(r=>`<div class="rounded-xl bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 p-4"><div class="text-sm text-stone-600">${r[0]}</div><div class="text-2xl font-bold mt-1">${fmt(r[1])} <span class="text-base font-semibold text-stone-500">${r[2]}</span></div></div>`).join('');
+  note.textContent=`${d.name}: about ${d.gPerCup} g per cup, ${fmt(c/16)} g per tablespoon, ${fmt(c/48)} g per teaspoon.`;
+}
+[ing,amt,unit].forEach(e=>e.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>
