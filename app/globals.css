@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --page: #f7f9fc;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --brand: #4f46e5;
+  --brand-dark: #4338ca;
+}
+
+.dark {
+  color-scheme: dark;
+  --page: #080c16;
+  --surface: #0f172a;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --line: #1e293b;
+  --brand: #818cf8;
+  --brand-dark: #6366f1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% -15%, rgba(99, 102, 241, 0.12), transparent 35rem),
+    var(--page);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.22);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.shell {
+  width: min(100% - 2rem, 1120px);
+  margin-inline: auto;
+}
+
+.prose-lite p {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.prose-lite ul {
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+  color: var(--muted);
+}
+
+.prose-lite li {
+  margin-top: 0.45rem;
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.35);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    width: min(100% - 3rem, 1120px);
+  }
+}
